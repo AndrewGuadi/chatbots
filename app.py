@@ -1,8 +1,9 @@
 from flask import Flask
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session
 from flask_wtf.csrf import CSRFProtect
 from markupsafe import escape
 
+from order_helpers import running_order, total_order, get_receipt
 from menu import take_order
 import json
 from menu import menu
@@ -29,7 +30,10 @@ bot = OpenAIHelper(api_key=api_key, intent_message=intent)
 @app.route('/')
 def index():
 
-    # Renders the HTML page
+    if not session.get('current_order'):
+        ## Set the session order
+        session['current_order'] = []
+
     return render_template('menu.html')
 
 
@@ -43,10 +47,18 @@ def handle_message():
     # iteration_counter += 1
 
     if user_input.lower() == 'done':
-        return jsonify({'response': 'Thank you for your order!', 'done': True})
+
+        #query gpt to get a finalized order to feed to running_order
+        query = "Can you read back my entire order to me please?"
+        response = bot.gpt_3(query)
+        order = running_order(session.get('current_order'), response, menu)
+        total = total_order(order)
+        print(total)
+        receipt = get_receipt(order)
+        print(receipt)
+        return jsonify({'response': f'Thank you for your order!\n{receipt}\n\nYour total is: {total}', 'done': True})
 
     response = bot.gpt_3(user_input)
-    print(response)
     return jsonify({'response': response, 'done': False})
 
 if __name__ == '__main__':

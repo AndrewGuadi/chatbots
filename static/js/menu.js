@@ -16,29 +16,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    function sendMessage(message, iterationCounter = 1) {
+    function sendMessage(message) {
         if (message.trim() === '') return;
 
         appendMessage('User', message);
+        
         userInput.value = '';
         userInput.focus();
 
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         // Send message to Flask server
         fetch('/message', {
             method: 'POST',
-            body: JSON.stringify({'message': message, 'iteration_counter': iterationCounter}),
+            body: JSON.stringify({'message': message}),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken  // Include the CSRF token in the request header
             }
         })
         .then(response => response.json())
         .then(data => {
             appendMessage('Bot', data.response);
-            if (!data.done) {
-                // Update iterationCounter for the next message
-                iterationCounter += 1;
-            }
-        })
+                    })
         .catch(error => {
             console.error('Error:', error);
         });

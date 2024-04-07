@@ -22,7 +22,7 @@ def running_order(order, text, menu):
                     "price": float,
                     "toppings": [array of topping strings],
                 },
-            ]'''
+            ] You must use this format for the order. MUST'''
     result = bot.gpt_json(prompt=prompt, data=data, example=example)
     try:
         order = json.loads(result)
@@ -39,13 +39,13 @@ def total_order(order):
     order = order.get('order')
     total = float()
     for item in order:
+        print(item)
         for key in item:
-            print(key)
             price = item[key].get('price')
-            if price:
-                total += price
-
-    return total
+        if price:
+            total += price
+    formatted_total = round(total, 2)
+    return formatted_total
 
 
 def get_receipt(order):

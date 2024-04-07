@@ -6,20 +6,23 @@ body, html {
 }
 
 #chat-container {
+    position:relative;
     display: flex;
     flex-direction: column;
     height: 100vh;
-    max-width: 600px;
+    max-width: 60vw;
     margin: auto;
     box-shadow: 0 0 10px rgba(0,0,0,0.05);
     background-color: #fff;
 }
 
 #chat-box {
+    width:45vw;
     flex-grow: 1;
     overflow-y: auto;
-    padding: 20px;
     background: #fff;
+    display: flex;
+    flex-direction: column; /* or row, depending on your layout */
 }
 
 #input-area {
@@ -54,6 +57,7 @@ body, html {
     border-radius: 18px;
     color: #fff;
     max-width: 80%;
+    position:relative;
 }
 
 .user-message {
@@ -73,6 +77,10 @@ body, html {
         height: 100%;
         max-width: none;
         box-shadow: none;
+    }
+
+    #chat-box {
+        width:95vw;
     }
 }
 

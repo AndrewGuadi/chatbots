@@ -42,9 +42,6 @@ def handle_message():
 
     user_input = request.json['message']
     safe_input = escape(user_input)
-    print(safe_input)
-    # iteration_counter = request.json.get('iteration_counter', 1)
-    # iteration_counter += 1
 
     if user_input.lower() == 'done':
 

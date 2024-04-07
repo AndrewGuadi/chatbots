@@ -6,15 +6,100 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Chatbot Interface</title>
     <link rel="stylesheet" href="static/css/menu.css">
+    <style>
+        @media screen and (min-width: 601px) {
+            body {
+                display: flex;
+                justify-content: space-between;
+            }
+        
+            
+            #view-menu-btn {
+                display: none; /* Hide menu icon on desktop */
+            }
+        
+            #menu {
+                width: 40vw; /* Adjust as needed */
+                background: url('../static/images/menu.png');
+                background-position: center;
+                background-size: cover;
+                height:100vh;
+                /* Other styling for your menu */
+            }
+        
+            #chat-container {
+                order: 2; /* Chat on the right */
+            }
+        }
+        
+        /* Layout for mobile */
+        @media screen and (max-width: 600px) {
+            #menu {
+                position: fixed;
+                width: 95vw;
+                height: 100vh;
+                top: 0;
+                left: 0;
+                background: url('../static/images/menu.png');
+                background-position: center;
+                background-size: contain;
+                z-index: 1;
+                overflow-y: auto;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+            }
+        
+            #menu.menu-visible {
+                transform: translateX(0%);
+            }
+        
+            /* New styles for the View Menu button */
+            #view-menu-btn {
+                margin-right: 10px; /* Add some margin to the right of the button */
+                padding: 10px 20px;
+                border: none;
+                background-color: #007bff; /* You can choose a different color */
+                color: white;
+                border-radius: 20px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+        }
+    </style>
 </head>
 <body>
+
+    <!-- <div id="menu-icon" onclick="toggleMenu()">☰</div> -->
+    
+    <div id="menu" class="menu-hidden"> <!-- Menu -->
+        <!-- Menu content goes here -->
+    </div>
+
     <div id="chat-container">
         <div id="chat-box"></div>
         <div id="input-area">
+            <button id="view-menu-btn" onclick="toggleMenu()">View Menu</button>
             <input type="text" id="user-input" placeholder="Type your message here..." autofocus>
             <button id="send-btn">Send</button>
         </div>
     </div>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            menu.classList.toggle('menu-visible');
+        }
+
+        // Function to close the menu if clicked outside of it
+        function handleClickOutside(event) {
+            var menu = document.getElementById('menu');
+            if (menu.classList.contains('menu-visible') && !event.target.matches('#view-menu-btn')) {
+                menu.classList.remove('menu-visible');
+            }
+        }
+
+        // Event listener for clicks on the document
+        document.addEventListener('click', handleClickOutside);
+    </script>
     <script src="static/js/menu.js"></script>
 </body>
 </html>
